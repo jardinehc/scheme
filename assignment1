@@ -1,0 +1,127 @@
+(define startinglist '())
+(define bothp1)
+(define tested1)
+(define bothp2)
+(define tested2)
+(define bothp3)
+(define tested3)
+(define bothp4)
+(define tested4)
+
+(define (medical_test Patient_Data)
+  (set! startinglist Patient_Data)
+
+  (set! bothp1 0)
+(set! tested1 0)
+
+(set! bothp2 0)
+(set! tested2 0)
+
+(set! bothp3 0)
+(set! tested3 0)
+
+(set! bothp4 0)
+(set! tested4 0)
+
+(p1 Patient_Data)
+)
+
+;checks and counts those who tested pos for test 1
+(define (p1 lst)
+
+  ;finds and counts those who are 1 on both
+
+  (cond ((equal? (cadar lst) '1) ;checks first number
+    ;if its 1 then get next number and if that is 1 then increase count
+    (cond ((equal? (caddar lst) '1) (set! bothp1 (+ bothp1 1))))
+  ))
+;finds and counts those who tested pos on test 1
+  (cond ((equal? (caddar lst) '1) (set! tested1 (+ tested1 1))))
+
+  ;if cdr of list is empty then call next method
+  ;else call call this method again with the cdr
+  (cond
+    ((null? (cdr lst)) (p2 startinglist))
+    (#T (p1 (cdr lst)))
+
+  )
+)
+;checks and counts those who tested pos for test 2
+  (define (p2 lst)
+
+  ;finds and counts those who are 1 on both
+  (cond ((equal? (cadar lst) '1) ;checks if patient has disease
+    ;if its 1 then get next next number
+    (cond ((equal? (car (cdddar lst)) '1) (set! bothp2 (+ bothp2 1))))
+  ))
+;finds and counts those who tested pos on test 2
+  (cond ((equal? (car (cdddar lst)) '1) (set! tested2 (+ tested2 1))))
+
+  ;if cdr of list is not empty then call again with the cdr
+  (cond
+    ((null? (cdr lst)) (p3 startinglist))
+    (#T (p2 (cdr lst)))
+
+  )
+  )
+;finds those without the diseSase and tested negative on test 1
+  (define (p3 lst)
+
+  (cond ((equal? (cadar lst) '0) ;checks first number
+    ;if its 0 then get next number
+    (cond ((equal? (caddar lst) '0) (set! bothp3 (+ bothp3 1)))) ;if also 0 add to count
+    ))
+ ;finds and counts those who tested neg on test 1
+  (cond ((equal? (caddar lst) '0) (set! tested3 (+ tested3 1))))
+
+  ;if cdr of list is not empty then call again with the cdr
+  (cond
+    ((null? (cdr lst)) (p4 startinglist))
+
+
+    (#T (p3 (cdr lst)))
+
+  )
+
+  )
+;Finds patients without the disease who tested negative on test 2
+  (define (p4 lst)
+
+  (cond ((equal? (cadar lst) '0) ;checks if patient is healthy
+    ;if its 0 then get next next number
+    (cond ((equal? (car (cdddar lst)) '0) (set! bothp4 (+ bothp4 1))))
+    ))
+
+  ;finds and counts those who tested pos on test 2
+  (cond ((equal? (car (cdddar lst)) '0) (set! tested4 (+ tested4 1))))
+
+  ;if cdr of list is not empty then call again with the cdr
+  (cond
+    ((null? (cdr lst)) (printanswer)) ;go to print the answer
+    (#T (p4 (cdr lst)))
+
+  )
+  )
+;calculates and displays the outcome of the testing
+  (define (printanswer)
+
+    (display "(")
+    (display (/ bothp1 tested1))
+    (display " ")
+    (display (/ bothp2 tested2))
+    (display " ")
+    (display (/ bothp3 tested3))
+    (display " ")
+    (display (/ bothp4 tested4))
+    (display " ")
+     (cond
+
+      ((and (> (/ bothp1 tested1) (/ bothp2 tested2)) (> (/ bothp3 tested3) (/ bothp4 tested4))) (display "test1"))
+
+     ((and (> (/ bothp2 tested2) (/ bothp1 tested1)) (> (/ bothp4 tested4) (/ bothp3 tested3))) (display "test2"))
+
+      (#T (display "neither"))
+
+
+    )
+    (display ")")
